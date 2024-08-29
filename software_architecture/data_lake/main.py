@@ -17,7 +17,7 @@ def create_data_lake_diagram():
     with Diagram("Data Lake", direction="LR", show=False, outformat="png", filename=output_file_path):
         raw_data = S3("Raw Data")
         
-        with Cluster("Processing"):
+        with Cluster("Databricks: Processing and Storage"):
             etl = Spark("ETL Jobs")
             catalog = Databricks("Data Catalog")
             databricks = Databricks("Analytics & ML")
