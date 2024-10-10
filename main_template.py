@@ -1,5 +1,5 @@
 import os
-from diagrams import Diagram, Cluster
+from diagrams import Diagram, Cluster, Edge
 # Additinoal Imports
 
 def create_architecture_diagram():
