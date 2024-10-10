@@ -48,7 +48,7 @@ def create_architecture_diagram():
         
         databricks_export >> external_processing
         
-        external_processing >> ingest_service
+        external_processing >> Edge(label="Manual Data Load from CSV") >> ingest_service
         
         ingest_service >> validation_service
         validation_service >> etl_service
