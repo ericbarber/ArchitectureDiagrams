@@ -10,7 +10,7 @@ from diagrams.onprem.client import Users
 def create_architecture_diagram():
 
     # Define the directory and file path
-    design_name = "New Git Actions for Shapes Clone 001"
+    design_name = "Git Actions for Shapes Clone"
     output_directory = "./diagrams"
     output_file_path = os.path.join(output_directory, f"{design_name.replace(' ', '_')}_diagram")
     print(output_file_path)
@@ -52,13 +52,13 @@ def create_architecture_diagram():
       
         # Tableau Directory and Shapes Folder
         with Cluster("Tableau Directory"):
+            copy_files = Action("Copy Files to Shapes Dir")
             shapes_dir = StoredData("Shapes Directory")
 
         # Pull
         with Cluster("Pull Operations"):
             create_backup = Decision("Create Backup (Optional)")
             prompt_overwrite = ManualInput("Prompt User Overwrite? (Optional)")
-            copy_files = Action("Copy Files to Shapes Dir")
             
             push_or_pull >> Edge(label="Pull") >> pull_changes >> start_pull
             check_shapes_dir = Decision("Shapes Directory Exists?")
@@ -67,8 +67,8 @@ def create_architecture_diagram():
             create_backup >> prompt_overwrite
             prompt_overwrite >> copy_files
             # Interaction with the Shapes Directory
-            check_shapes_dir >> Edge(label="No") >> shapes_dir
-            create_backup >> shapes_dir
+            check_shapes_dir >> Edge(label="No") >> copy_files
+            create_backup >> copy_files
             copy_files >> shapes_dir >> end_pull
         
         # Push 
