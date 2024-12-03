@@ -20,7 +20,7 @@ def create_architecture_diagram():
         os.makedirs(output_directory)
         print(f"Created directory: {output_directory}")
     
-    with Diagram(f"{design_name.title()} Architecture", direction="TB", show=False, outformat="png", filename=output_file_path):
+    with Diagram(f"{design_name.title()} Architecture", direction="LR", show=False, outformat="png", filename=output_file_path):
         # Architecture diagrams
         # Elements
         start_pull = StartEnd("Start Pull")
