@@ -26,7 +26,11 @@ def create_architecture_diagram():
         # Databricks Workspace
         with Cluster("Databricks Workspace"):
             workspace = ElasticFileSystemEFSFileSystem("Workspace\n(notebooks, metadata)")
-        
+
+        # Volumes 
+        with Cluster("Databricks Volumes"):
+            volumes = Storage("Metastore")
+
         # DBFS
         with Cluster("Databricks File System (DBFS)"):
             dbfs = Storage("dbfs:/")
@@ -47,17 +51,25 @@ def create_architecture_diagram():
         # dbfs >> read_write_operation
 
         import_function = Python("Import\n(import_to_workspace)")
-        save_function = Python("Save\n(save_to_dbfs)")
         export_function = Python("Export\n(workspace_api.export_workspace)")
         read_write_function = Python("Read/Write\nopen()")
 
         # Workflow connections
-        user >> workspace >> export_function >> local_tmp
-        local_tmp >> read_write_function
-        local_tmp >> save_function >> dbfs
-        local_tmp >> import_function
-        dbfs >> import_function >> workspace
+        user >> workspace >> export_function
 
+        export_function >> volumes
+        volumes >> read_write_function
+        volumes >> import_function
+        
+        export_function >> local_tmp
+        local_tmp >> read_write_function
+        local_tmp >> import_function
+        
+        export_function >> dbfs
+        dbfs >> read_write_function
+        dbfs >> import_function
+
+        import_function >> workspace
 
 if __name__ == "__main__":
     create_architecture_diagram()
